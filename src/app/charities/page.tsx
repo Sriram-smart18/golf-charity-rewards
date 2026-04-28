@@ -17,7 +17,7 @@ const MOCK_CHARITIES = [
     category: "Education",
     location: "Worldwide",
     impact: "3.2M Students",
-    image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&q=80&w=800",
+    image: "https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?auto=format&fit=crop&q=80&w=800",
     desc: "Building schools and providing scholarships in developing nations."
   },
   {
@@ -26,7 +26,7 @@ const MOCK_CHARITIES = [
     category: "Environment",
     location: "Sub-Saharan Africa",
     impact: "1.5M Liters daily",
-    image: "https://images.unsplash.com/photo-1541888087625-f8148b260959?auto=format&fit=crop&q=80&w=800",
+    image: "https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?auto=format&fit=crop&q=80&w=800",
     desc: "Providing sustainable access to clean drinking water."
   },
   {
@@ -35,7 +35,7 @@ const MOCK_CHARITIES = [
     category: "Sports & Youth",
     location: "North America",
     impact: "50k Kids trained",
-    image: "https://images.unsplash.com/photo-1535136125430-80410712a7f5?auto=format&fit=crop&q=80&w=800",
+    image: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&q=80&w=800",
     desc: "Using golf to teach life skills and provide mentorship to at-risk youth."
   },
   {
@@ -44,7 +44,7 @@ const MOCK_CHARITIES = [
     category: "Health",
     location: "Crisis Zones",
     impact: "2M Patients treated",
-    image: "https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&q=80&w=800",
+    image: "https://images.unsplash.com/photo-1524069290683-0457abfe42c3?auto=format&fit=crop&q=80&w=800",
     desc: "Emergency medical response teams providing critical care."
   },
   {
@@ -53,7 +53,7 @@ const MOCK_CHARITIES = [
     category: "Environment",
     location: "Global",
     impact: "10k Tons plastic removed",
-    image: "https://images.unsplash.com/photo-1483683804023-6ccdb62f86ef?auto=format&fit=crop&q=80&w=800",
+    image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=800",
     desc: "Marine conservation and massive ocean cleanup operations."
   },
   {
@@ -62,7 +62,7 @@ const MOCK_CHARITIES = [
     category: "Community",
     location: "Europe & NA",
     impact: "5M Meals served",
-    image: "https://images.unsplash.com/photo-1593113592332-ce0f62d85fcd?auto=format&fit=crop&q=80&w=800",
+    image: "https://images.unsplash.com/photo-1518398092300-531ea5401cb4?auto=format&fit=crop&q=80&w=800",
     desc: "Tackling food insecurity in major metropolitan areas."
   }
 ]

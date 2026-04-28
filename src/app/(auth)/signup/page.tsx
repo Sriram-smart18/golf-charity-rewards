@@ -45,7 +45,7 @@ export default function SignupPage() {
       return
     }
 
-    const { error } = await supabase.auth.signUp({
+    const { data: authData, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -60,7 +60,22 @@ export default function SignupPage() {
 
     if (error) {
       toast.error(error.message)
-    } else {
+    } else if (authData.user) {
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .upsert({
+          id: authData.user.id,
+          email: email,
+          full_name: full_name,
+          contribution_percent: contribution_percent,
+          subscription_plan: subscription_plan,
+          ...(charity_id && !charity_id.startsWith('mock') ? { charity_id } : {})
+        }, { onConflict: 'id' })
+      
+      if (profileError) {
+        console.error("Profile creation error:", profileError)
+      }
+
       toast.success("Account created successfully! Check your email to verify.")
       router.push("/dashboard")
     }

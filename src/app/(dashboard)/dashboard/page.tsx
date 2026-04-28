@@ -144,24 +144,26 @@ export default function DashboardHome() {
               <CardDescription>Your latest 5 active scores</CardDescription>
             </CardHeader>
             <CardContent className="h-64">
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={scoreData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                  <defs>
-                    <linearGradient id="colorScore" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#4ade80" stopOpacity={0.5}/>
-                      <stop offset="95%" stopColor="#4ade80" stopOpacity={0}/>
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" vertical={false} />
-                  <XAxis dataKey="date" stroke="#ffffff50" tick={{ fontSize: 12 }} axisLine={false} tickLine={false} />
-                  <YAxis stroke="#ffffff50" tick={{ fontSize: 12 }} axisLine={false} tickLine={false} />
-                  <Tooltip 
-                    contentStyle={{ backgroundColor: '#000', border: '1px solid #ffffff20', borderRadius: '8px' }}
-                    itemStyle={{ color: '#fff' }}
-                  />
-                  <Area type="monotone" dataKey="score" stroke="#4ade80" strokeWidth={3} fillOpacity={1} fill="url(#colorScore)" />
-                </AreaChart>
-              </ResponsiveContainer>
+              <div className="w-full h-[250px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={scoreData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                    <defs>
+                      <linearGradient id="colorScore" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#4ade80" stopOpacity={0.5}/>
+                        <stop offset="95%" stopColor="#4ade80" stopOpacity={0}/>
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" vertical={false} />
+                    <XAxis dataKey="date" stroke="#ffffff50" tick={{ fontSize: 12 }} axisLine={false} tickLine={false} />
+                    <YAxis stroke="#ffffff50" tick={{ fontSize: 12 }} axisLine={false} tickLine={false} />
+                    <Tooltip 
+                      contentStyle={{ backgroundColor: '#000', border: '1px solid #ffffff20', borderRadius: '8px' }}
+                      itemStyle={{ color: '#fff' }}
+                    />
+                    <Area type="monotone" dataKey="score" stroke="#4ade80" strokeWidth={3} fillOpacity={1} fill="url(#colorScore)" />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
             </CardContent>
           </Card>
         </motion.div>
@@ -176,19 +178,21 @@ export default function DashboardHome() {
               <CardDescription>Your payouts over the last 5 months</CardDescription>
             </CardHeader>
             <CardContent className="h-64">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={winningData} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" vertical={false} />
-                  <XAxis dataKey="month" stroke="#ffffff50" tick={{ fontSize: 12 }} axisLine={false} tickLine={false} />
-                  <YAxis stroke="#ffffff50" tick={{ fontSize: 12 }} axisLine={false} tickLine={false} tickFormatter={(val) => `₹${val/1000}k`} />
-                  <Tooltip 
-                    cursor={{ fill: '#ffffff10' }}
-                    contentStyle={{ backgroundColor: '#000', border: '1px solid #ffffff20', borderRadius: '8px' }}
-                    formatter={(value: any) => [`₹${(value || 0).toLocaleString()}`, 'Payout']}
-                  />
-                  <Bar dataKey="amount" fill="var(--neon-purple)" radius={[4, 4, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
+              <div className="w-full h-[250px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={winningData} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" vertical={false} />
+                    <XAxis dataKey="month" stroke="#ffffff50" tick={{ fontSize: 12 }} axisLine={false} tickLine={false} />
+                    <YAxis stroke="#ffffff50" tick={{ fontSize: 12 }} axisLine={false} tickLine={false} tickFormatter={(val) => `₹${val/1000}k`} />
+                    <Tooltip 
+                      cursor={{ fill: '#ffffff10' }}
+                      contentStyle={{ backgroundColor: '#000', border: '1px solid #ffffff20', borderRadius: '8px' }}
+                      formatter={(value: any) => [`₹${(value || 0).toLocaleString()}`, 'Payout']}
+                    />
+                    <Bar dataKey="amount" fill="var(--neon-purple)" radius={[4, 4, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
             </CardContent>
           </Card>
         </motion.div>

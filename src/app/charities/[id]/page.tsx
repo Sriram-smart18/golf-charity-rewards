@@ -91,25 +91,27 @@ export default function CharityDetailsPage({ params }: { params: Promise<{ id: s
               <CardDescription>Monthly contributions from Golf Charity Rewards platform</CardDescription>
             </CardHeader>
             <CardContent className="h-80">
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={data} margin={{ top: 10, right: 0, left: -20, bottom: 0 }}>
-                  <defs>
-                    <linearGradient id="colorDonations" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="var(--neon-purple)" stopOpacity={0.8}/>
-                      <stop offset="95%" stopColor="var(--neon-purple)" stopOpacity={0}/>
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" vertical={false} />
-                  <XAxis dataKey="name" stroke="#ffffff50" axisLine={false} tickLine={false} />
-                  <YAxis stroke="#ffffff50" axisLine={false} tickLine={false} tickFormatter={(value) => `₹${value/1000}k`} />
-                  <Tooltip 
-                    contentStyle={{ backgroundColor: '#000', border: '1px solid #ffffff20', borderRadius: '8px' }}
-                    itemStyle={{ color: '#fff' }}
-                    formatter={(value: any) => [`₹${(value || 0).toLocaleString()}`, 'Contributions']}
-                  />
-                  <Area type="monotone" dataKey="donations" stroke="var(--neon-purple)" strokeWidth={3} fillOpacity={1} fill="url(#colorDonations)" />
-                </AreaChart>
-              </ResponsiveContainer>
+              <div className="w-full h-[300px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={data} margin={{ top: 10, right: 0, left: -20, bottom: 0 }}>
+                    <defs>
+                      <linearGradient id="colorDonations" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="var(--neon-purple)" stopOpacity={0.8}/>
+                        <stop offset="95%" stopColor="var(--neon-purple)" stopOpacity={0}/>
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" vertical={false} />
+                    <XAxis dataKey="name" stroke="#ffffff50" axisLine={false} tickLine={false} />
+                    <YAxis stroke="#ffffff50" axisLine={false} tickLine={false} tickFormatter={(value) => `₹${value/1000}k`} />
+                    <Tooltip 
+                      contentStyle={{ backgroundColor: '#000', border: '1px solid #ffffff20', borderRadius: '8px' }}
+                      itemStyle={{ color: '#fff' }}
+                      formatter={(value: any) => [`₹${(value || 0).toLocaleString()}`, 'Contributions']}
+                    />
+                    <Area type="monotone" dataKey="donations" stroke="var(--neon-purple)" strokeWidth={3} fillOpacity={1} fill="url(#colorDonations)" />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
             </CardContent>
           </Card>
 
