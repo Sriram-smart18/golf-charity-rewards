@@ -42,7 +42,8 @@ export default function DashboardHome() {
 
       if (profile) {
         setUserName(profile.full_name || user.user_metadata?.first_name || user.email?.split('@')[0] || "Golfer")
-        setSubscriptionStatus(profile.subscription_status === 'active' ? 'Active' : 'Inactive')
+        const status = profile.subscription_status || 'active'
+        setSubscriptionStatus(status === 'active' ? 'Active' : 'Inactive')
         // @ts-ignore
         if (profile.charities?.name) {
           // @ts-ignore
@@ -52,7 +53,7 @@ export default function DashboardHome() {
         setCharityImpact(profile.contribution_percent ? profile.contribution_percent * 50 : 500)
       } else {
         setUserName(user.user_metadata?.first_name || user.email?.split('@')[0] || "Golfer")
-        setSubscriptionStatus('Inactive')
+        setSubscriptionStatus('Active')
       }
 
       // Fetch scores

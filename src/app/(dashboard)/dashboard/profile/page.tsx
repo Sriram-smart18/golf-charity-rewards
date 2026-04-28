@@ -59,7 +59,7 @@ export default function ProfilePage() {
             month: 'long',
             year: 'numeric'
           }),
-          status: profileData?.subscription_status || "Inactive",
+          status: profileData?.subscription_status || "active",
           charityName: charityName,
           contributionPercent: profileData?.contribution_percent || null
         })

@@ -69,6 +69,7 @@ export default function SignupPage() {
           full_name: full_name,
           contribution_percent: contribution_percent,
           subscription_plan: subscription_plan,
+          subscription_status: 'active',
           ...(charity_id && !charity_id.startsWith('mock') ? { charity_id } : {})
         }, { onConflict: 'id' })
       
