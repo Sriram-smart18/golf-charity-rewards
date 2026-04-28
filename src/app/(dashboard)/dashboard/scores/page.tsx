@@ -38,7 +38,7 @@ export default function ScoresPage() {
 
       if (error) {
         toast.error("Failed to load scores")
-        console.error(error)
+        console.error(JSON.stringify(error, null, 2))
       } else if (data) {
         setScores(data)
       }
@@ -82,7 +82,7 @@ export default function ScoresPage() {
 
     if (error) {
       toast.error("Failed to add score")
-      console.error(error)
+      console.error(JSON.stringify(error, null, 2))
       return
     }
 
@@ -105,7 +105,7 @@ export default function ScoresPage() {
     const { error } = await supabase.from('scores').delete().eq('id', id)
     if (error) {
       toast.error("Failed to delete score")
-      console.error(error)
+      console.error(JSON.stringify(error, null, 2))
       return
     }
 
