@@ -9,19 +9,20 @@ import { useRouter } from "next/navigation"
 
 export default function ProfilePage() {
   const router = useRouter()
+  const [loading, setLoading] = useState(true)
   const [userProfile, setUserProfile] = useState<{
     fullName: string;
     email: string;
     joinDate: string;
     status: string;
-    charityId: string | null;
+    charityName: string | null;
     contributionPercent: number | null;
   }>({
-    fullName: "Loading...",
-    email: "loading@example.com",
-    joinDate: "Loading...",
-    status: "Loading...",
-    charityId: null,
+    fullName: "...",
+    email: "...",
+    joinDate: "...",
+    status: "...",
+    charityName: null,
     contributionPercent: null,
   });
 
@@ -38,7 +39,7 @@ export default function ProfilePage() {
 
         const { data: profileData, error: profileError } = await supabase
           .from('profiles')
-          .select('*')
+          .select('*, charities(name)')
           .eq('id', user.id)
           .single()
         
@@ -48,6 +49,9 @@ export default function ProfilePage() {
                          user.email?.split('@')[0] ||
                          "Golfer"
 
+        // @ts-ignore
+        const charityName = profileData?.charities?.name || null
+
         setUserProfile({
           fullName: fullName,
           email: user.email || profileData?.email || "",
@@ -55,20 +59,14 @@ export default function ProfilePage() {
             month: 'long',
             year: 'numeric'
           }),
-          status: profileData?.subscription_status || "Active",
-          charityId: profileData?.charity_id || null,
+          status: profileData?.subscription_status || "Inactive",
+          charityName: charityName,
           contributionPercent: profileData?.contribution_percent || null
         })
       } catch (err) {
         console.error("Failed to load profile:", err)
-        setUserProfile({
-          fullName: "Demo User",
-          email: "demo@example.com",
-          joinDate: "January 2024",
-          status: "Demo Mode",
-          charityId: "demo-charity-id",
-          contributionPercent: 10
-        })
+      } finally {
+        setLoading(false)
       }
     }
     fetchUser()
@@ -77,6 +75,10 @@ export default function ProfilePage() {
   const fadeIn = {
     hidden: { opacity: 0, y: 10 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+  }
+
+  if (loading) {
+    return <div className="p-8 text-white/60">Loading profile...</div>
   }
 
   return (
@@ -135,16 +137,16 @@ export default function ProfilePage() {
                 <label className="text-sm text-white/50 flex items-center gap-2">
                   <Shield className="w-4 h-4" /> Account Status
                 </label>
-                <div className="p-3 bg-green-500/10 rounded-lg border border-green-500/20 text-green-400 font-medium flex items-center gap-2 capitalize">
-                  <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" /> {userProfile.status}
+                <div className={`p-3 rounded-lg border font-medium flex items-center gap-2 capitalize ${userProfile.status === 'active' ? 'bg-green-500/10 border-green-500/20 text-green-400' : 'bg-red-500/10 border-red-500/20 text-red-400'}`}>
+                  <div className={`w-2 h-2 rounded-full ${userProfile.status === 'active' ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`} /> {userProfile.status}
                 </div>
               </div>
               <div className="space-y-2">
                 <label className="text-sm text-white/50 flex items-center gap-2">
                   <Heart className="w-4 h-4" /> Selected Charity
                 </label>
-                <div className="p-3 bg-white/5 rounded-lg border border-white/10 text-white/90 truncate">
-                  {userProfile.charityId || "Not selected"}
+                <div className="p-3 bg-white/5 rounded-lg border border-white/10 text-white/90 truncate" title={userProfile.charityName || "Not selected"}>
+                  {userProfile.charityName || "Not selected"}
                 </div>
               </div>
               <div className="space-y-2">

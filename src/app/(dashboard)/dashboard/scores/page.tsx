@@ -1,13 +1,14 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { toast } from "sonner"
 import { Trash2, Plus, Flag } from "lucide-react"
-import { format } from "date-fns"
+import { format, parseISO } from "date-fns"
+import { createClient } from "@/lib/supabase/client"
 
 type Score = {
   id: string
@@ -16,17 +17,38 @@ type Score = {
 }
 
 export default function ScoresPage() {
-  const [scores, setScores] = useState<Score[]>([
-    { id: "1", score: 42, date: "2026-05-20" },
-    { id: "2", score: 38, date: "2026-05-18" },
-    { id: "3", score: 45, date: "2026-05-15" },
-    { id: "4", score: 22, date: "2026-05-10" },
-  ])
+  const [scores, setScores] = useState<Score[]>([])
+  const [loading, setLoading] = useState(true)
 
   const [newScore, setNewScore] = useState("")
   const [newDate, setNewDate] = useState("")
+  const supabase = createClient()
 
-  const handleAddScore = (e: React.FormEvent) => {
+  useEffect(() => {
+    const fetchScores = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return
+
+      const { data, error } = await supabase
+        .from('scores')
+        .select('id, score, date')
+        .eq('user_id', user.id)
+        .order('date', { ascending: false })
+        .limit(5)
+
+      if (error) {
+        toast.error("Failed to load scores")
+        console.error(error)
+      } else if (data) {
+        setScores(data)
+      }
+      setLoading(false)
+    }
+
+    fetchScores()
+  }, [])
+
+  const handleAddScore = async (e: React.FormEvent) => {
     e.preventDefault()
     
     const scoreVal = parseInt(newScore)
@@ -46,36 +68,49 @@ export default function ScoresPage() {
       return
     }
 
-    const newScoreObj: Score = {
-      id: Math.random().toString(36).substr(2, 9),
-      score: scoreVal,
-      date: newDate
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) {
+      toast.error("Not authenticated")
+      return
+    }
+
+    const { data, error } = await supabase
+      .from('scores')
+      .insert({ user_id: user.id, score: scoreVal, date: newDate })
+      .select('id, score, date')
+      .single()
+
+    if (error) {
+      toast.error("Failed to add score")
+      console.error(error)
+      return
     }
 
     // Sort by date descending
-    let updatedScores = [...scores, newScoreObj].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    let updatedScores = [...scores, data].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 
     // Rolling logic: retain only latest 5
     if (updatedScores.length > 5) {
       updatedScores = updatedScores.slice(0, 5) // since it's sorted desc, slice(0,5) keeps the 5 most recent dates
-      toast.info("Rolling logic applied: The oldest score was removed.")
+      toast.info("Rolling logic applied: Only latest 5 scores are kept active.")
     }
 
     setScores(updatedScores)
     setNewScore("")
     setNewDate("")
     toast.success("Score added successfully!")
-    
-    // TODO: Connect to Supabase
-    // const { error } = await supabase.from('scores').insert({ user_id: user.id, score: scoreVal, date: newDate })
-    // if success, trigger a postgres function or edge function to delete oldest if count > 5
   }
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
+    const { error } = await supabase.from('scores').delete().eq('id', id)
+    if (error) {
+      toast.error("Failed to delete score")
+      console.error(error)
+      return
+    }
+
     setScores(scores.filter(s => s.id !== id))
     toast.success("Score deleted")
-    // TODO: Connect to Supabase
-    // await supabase.from('scores').delete().eq('id', id)
   }
 
   return (
@@ -136,7 +171,9 @@ export default function ScoresPage() {
               <Flag className="text-neon-blue w-6 h-6 opacity-50" />
             </CardHeader>
             <CardContent>
-              {scores.length === 0 ? (
+              {loading ? (
+                <div className="text-center py-12 text-white/40">Loading scores...</div>
+              ) : scores.length === 0 ? (
                 <div className="text-center py-12 text-white/40">
                   <Flag className="w-12 h-12 mx-auto mb-4 opacity-20" />
                   <p>No scores submitted yet.</p>
@@ -151,7 +188,7 @@ export default function ScoresPage() {
                         </div>
                         <div>
                           <div className="font-medium text-white">Score Submitted</div>
-                          <div className="text-sm text-white/50">{format(new Date(s.date), 'MMMM d, yyyy')}</div>
+                          <div className="text-sm text-white/50">{format(parseISO(s.date), 'MMMM d, yyyy')}</div>
                         </div>
                       </div>
                       <Button 

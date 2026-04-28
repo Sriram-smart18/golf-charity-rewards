@@ -51,7 +51,7 @@ export default function SignupPage() {
       options: {
         data: {
           full_name,
-          charity_id,
+          ...(charity_id && !charity_id.startsWith('mock') ? { charity_id } : {}),
           contribution_percent,
           subscription_plan,
         }
